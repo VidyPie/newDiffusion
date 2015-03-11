@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.Box;
@@ -69,13 +70,17 @@ public class Simulator {
             //System.out.println(simState);
             switch (simState) {
                 case RUNNING:
-                    if (System.currentTimeMillis() >= lastStep + speed && step <= nValue && m == 0) {
+                    if (System.currentTimeMillis() >= lastStep + speed && step <= nValue && m == 0 && (stateConst == 1 || stateConst == 2)) {
                         simulateOneStep();
                         //step++;
                         lastStep = System.currentTimeMillis();
                     }
                     if (step >= nValue) {
                         simState = SimState.WAITING;
+                    }
+                    if(stateConst == 3 && System.currentTimeMillis() >= lastStep + speed && step <= nValue) {
+                        cellularSimulationOneStep();
+                        lastStep = System.currentTimeMillis();
                     }
                     break;
                 case READY:
@@ -110,6 +115,28 @@ public class Simulator {
         }
 
     }
+    
+    private void start2() {
+        try {
+            JTextField difField = new JTextField(4);
+            JTextField parField = new JTextField(4);
+            JPanel myPanel = new JPanel();
+            myPanel.add(new JLabel("Steps:"));
+            myPanel.add(difField);
+            myPanel.add(Box.createHorizontalStrut(30)); // a spacer
+            myPanel.add(new JLabel("Particles:"));
+            myPanel.add(parField);
+            int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter nValue", JOptionPane.OK_CANCEL_OPTION);
+            nValue = Integer.parseInt(difField.getText());
+            partCount = Integer.parseInt(parField.getText());
+            reset();
+            populate2();
+        } catch (NumberFormatException e) {
+            int result = JOptionPane.showConfirmDialog(null, "Make sure all values are numbers", "CRITICAL ERROR", JOptionPane.OK_CANCEL_OPTION);
+            //customStart();
+        }
+
+    }
 
     private void simulateOneStep() {
         //System.out.println(step);
@@ -125,16 +152,24 @@ public class Simulator {
         }
         particles.addAll(newParticles);
         view.prepareSystem(step, system);
-        view.showStatus(step, system, stateConst);
+        view.showStatus(step, system, stateConst, locations);
         step++;
     }
 
     private void cellularSimulationOneStep() {
         for (Iterator<Location> it = locations.iterator(); it.hasNext();) {
             Location location = it.next();
+            List<Location> adjacentLoc = new ArrayList<Location>();
             location.steinLoop();
         }
-
+        for (Iterator<Location> it = locations.iterator(); it.hasNext();) {
+            Location location = it.next();
+            location.trix();
+        }
+        view.prepareSystem(step, system);
+        view.showStatus(step, system, stateConst, locations);
+        step++;
+        System.out.println("Step Complete");
     }
 
     private void stop() {
@@ -172,7 +207,11 @@ public class Simulator {
             }
         });
         cellButton.addActionListener((ActionEvent e) -> {
-
+            if (simState != SimState.RUNNING) {
+                stateConst = 3;
+                start2();
+                simState = SimState.READY;
+            }
         });
         stopButton.addActionListener((ActionEvent e) -> {
             simState = SimState.WAITING;
@@ -233,7 +272,27 @@ public class Simulator {
             }
         }
         view.prepareSystem(step, system);
-        view.showStatus(step, system, stateConst);
+        view.showStatus(step, system, stateConst, locations);
+    }
+    private void populate2() {
+        system.clear();
+        int t = 0;
+        int n = 0;
+        Random r = new Random();
+        for (Iterator<Location> it = locations.iterator(); it.hasNext();) {
+            Location location = it.next();
+            List<Location> adjacentLoc = new ArrayList<Location>();
+            for (Iterator<Location> itv = locations.iterator(); itv.hasNext();) {
+                Location location2 = itv.next();
+                if(location2.getX() > location.getX() - 2 && location2.getX() < location.getX() + 2 && location2.getY() > location.getY() - 2 && location2.getY() < location.getY() + 2) {
+                    adjacentLoc.add(location2);
+                }
+            }
+            location.setAdjacentLoc(adjacentLoc);
+        }
+        locations.get(8192).placeParticle(1);
+        view.prepareSystem(step, system);
+        view.showStatus(step, system, stateConst, locations);
     }
 
 }

@@ -36,6 +36,12 @@ public class ParticleSystem
                 
             }
         }
+        
+        
+        
+        
+        
+        
     }
 
     public void clear(Location location)

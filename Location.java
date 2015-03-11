@@ -15,6 +15,7 @@ public class Location {
     private int x;
     private int y;
     private int actualPop;
+    private int newComerPop;
     private List<Location> adjacentLocations;
 
     public Location(int x, int y) {
@@ -33,26 +34,54 @@ public class Location {
     }
 
     public void steinLoop() {
-        Random r = new Random();
-        double pop = actualPop;
-        double leftLoc = 8;
+        if(actualPop > 0) {
+        Random r = new Random();    
+        double pop = actualPop;   
+        double leftLoc = adjacentLocations.size();
         for (Iterator<Location> it = adjacentLocations.iterator(); it.hasNext();) {
-            double stddev = Math.sqrt(pop * (1/leftLoc) * ((leftLoc - 1)/leftLoc));
-            System.out.println("Standard deviation is: " + stddev);
-            double mean = pop * 0.125d;
-            System.out.println("Mean is: " + mean);
-            int moved = (int) (r.nextGaussian() * stddev + mean);
-            System.out.println("Moved: " + moved);
-            pop = pop - moved;
-            leftLoc = leftLoc - 1;
-            actualPop = actualPop - (int)moved;
+            Location location = it.next();
+            if (leftLoc > 1) {
+                double stddev = Math.sqrt(pop * (1 / leftLoc) * ((leftLoc - 1) / leftLoc));
+                
+                //System.out.println("Standard deviation is: " + stddev);
+                double mean = pop * (1 / leftLoc);
+                
+                //System.out.println("Mean is: " + mean);
+                double movedT = (r.nextGaussian() * stddev + mean);
+                int moved = (int) movedT;
+                System.out.println(movedT);
+                System.out.println(moved);
+                System.out.println("");
+                pop = pop - moved;
+
+                location.placeParticle(moved);
+                leftLoc = leftLoc - 1;
+                actualPop = actualPop - moved;
+                
+            }
+            else {
+                location.placeParticle(actualPop);
+                actualPop = 0;
+            }
+        }
         }
     }
 
     public void addList(List<Location> adjacentLocationsNew) {
         adjacentLocations = adjacentLocationsNew;
     }
-
+    
+    public void trix() {
+        actualPop = newComerPop;
+    }
+    
+    public void setAdjacentLoc(List<Location> adjLoc) {
+        adjacentLocations = adjLoc;
+    }
+    
+    public int getPop() {
+        return actualPop;
+    }
     /**
      * @return The row.
      */
@@ -64,8 +93,8 @@ public class Location {
         return y;
     }
 
-    public void placeParticle() {
-        actualPop = actualPop + 1;
+    public void placeParticle(int newParticles) {
+        newComerPop = newComerPop + newParticles;
     }
 
     public void removeParticle() {

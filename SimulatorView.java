@@ -3,18 +3,15 @@ package diffusjon;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+//import java.awt.Graphics2D;
 import java.awt.Image;
-import static java.awt.PageAttributes.ColorType.COLOR;
+//import static java.awt.PageAttributes.ColorType.COLOR;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 /**
  *
@@ -64,7 +62,7 @@ public class SimulatorView extends JFrame {
         visitedLocations.clear();
     }
 
-    public void showStatus(int step, ParticleSystem system, int stateConst) {
+    public void showStatus(int step, ParticleSystem system, int stateConst, List<Location> locations) {
         if (stateConst == 1) {
             for (int aix = 0; aix < system.getX(); aix++) {
                 for (int aiy = 0; aiy < system.getY(); aiy++) {
@@ -102,16 +100,14 @@ public class SimulatorView extends JFrame {
             }
         }
         if (stateConst == 3) {
-            for (int ax = 0; ax < system.getX(); ax++) {
-                for (int ay = 0; ay < system.getY(); ay++) {
-                    Particle particle = system.getObjectAt(ax, ay);
-                    if (particle == null) {
-                        loco.drawEmpty(ax, ay);
-                    } else {
-                        loco.drawMark(ax, ay);
-                        Location location = new Location(ax, ay);
-                        visitedLocations.add(location);
-                    }
+            for (Iterator<Location> it = locations.iterator(); it.hasNext();) {
+                Location location = it.next();
+                
+                
+                if (location.getPop() > 0) {
+                    loco.drawMark(location.getX(), location.getY());
+                } else {
+                    loco.drawEmpty(location.getX(), location.getY());
                 }
             }
         }
@@ -192,17 +188,6 @@ public class SimulatorView extends JFrame {
                 g.drawImage(systemFront, 0, 50, null);
                 //g.drawImage(underLine, 50, 355, null);
                 //g.drawImage(yLine, 25, 50, null);
-                Point2D.Double P1 = new Point2D.Double(50, 75); // Start Point
-                Point2D.Double P2 = new Point2D.Double(150, 75); // End Point
-
-                Point2D.Double ctrl1 = new Point2D.Double(80, 25); // Control Point 1
-                Point2D.Double ctrl2 = new Point2D.Double(160, 100); // Control Point 2
-
-                CubicCurve2D.Double cubicCurve; // Cubic curve
-                System.out.println("");
-                cubicCurve = new CubicCurve2D.Double(P1.x, P1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, P2.x, P2.y);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.draw(cubicCurve);
 
             }
         }
