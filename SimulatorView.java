@@ -1,4 +1,4 @@
-package diffusjon;
+package newDiffusion;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,7 +37,7 @@ public class SimulatorView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(true);
         visitedLocations = new ArrayList<Location>();
-        setTitle("Diffusjon");
+        setTitle("newDiffusion");
         menu = new sideMenu();
         menu.setLayout(null);
         setLocation(400, 200);

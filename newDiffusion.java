@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-package diffusjon;
+package newDiffusion;
 
 /**
  *
  * @author vidar
  */
-public class Diffusjon {
+public class newDiffusion {
 
     /**
      * @param args the command line arguments
