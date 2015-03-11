@@ -1,4 +1,4 @@
-package diffusjon;
+package newDiffusion;
 
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +39,7 @@ public class Location {
         for (Iterator<Location> it = adjacentLocations.iterator(); it.hasNext();) {
             double stddev = Math.sqrt(pop * (1/leftLoc) * ((leftLoc - 1)/leftLoc));
             System.out.println("Standard deviation is: " + stddev);
-            double mean = pop * 0.125d;
+            double mean = pop * (1/leftLoc);
             System.out.println("Mean is: " + mean);
             int moved = (int) (r.nextGaussian() * stddev + mean);
             System.out.println("Moved: " + moved);

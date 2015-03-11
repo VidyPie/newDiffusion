@@ -1,4 +1,4 @@
-package diffusjon;
+package newDiffusion;
 
 import java.util.Collections;
 import java.util.HashMap;
