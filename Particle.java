@@ -1,5 +1,5 @@
 
-package newDiffusion;
+package diffusjon;
 
 import java.util.List;
 import java.util.Random;

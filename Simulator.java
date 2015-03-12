@@ -1,4 +1,4 @@
-package newDiffusion;
+package diffusjon;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -178,13 +178,13 @@ public class Simulator {
 
     private void layoutMenu() {
         //menu.setLayout(null);
-        JButton startButton = new JButton("START");
-        JButton exitButton = new JButton("EXIT");
-        JButton stopButton = new JButton("STOP");
-        JButton agentButton = new JButton("AGENT");
-        JButton cellButton = new JButton("CELLULAR");
-        JButton singleButton = new JButton("SINGLE");
-
+        JButton startButton = new JButton("Start");
+        JButton exitButton = new JButton("Exit");
+        JButton stopButton = new JButton("Stop");
+        JButton agentButton = new JButton("Random Walk");
+        JButton cellButton = new JButton("Cellular Automation");
+        JButton singleButton = new JButton("Single Walk");
+        JButton heatButton = new JButton("Heatmap");
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("You clicked START");
@@ -213,6 +213,13 @@ public class Simulator {
                 simState = SimState.READY;
             }
         });
+        heatButton.addActionListener((ActionEvent e) -> {
+            if(simState != SimState.RUNNING) {
+                stateConst = 4;
+                showHeatMap();
+            }
+            
+        });
         stopButton.addActionListener((ActionEvent e) -> {
             simState = SimState.WAITING;
             view.addToMenu(startButton);
@@ -231,16 +238,18 @@ public class Simulator {
             System.out.println("You clicked EXIT");
             exit();
         });
-        startButton.setBounds(10, 10, 90, 30);
-        stopButton.setBounds(10, 10, 90, 30);
-        exitButton.setBounds(10, 115, 90, 30);
-        agentButton.setBounds(10, 165, 90, 30);
-        cellButton.setBounds(10, 200, 90, 30);
-        singleButton.setBounds(10, 235, 90, 30);
+        startButton.setBounds(10, 10, 180, 30);
+        stopButton.setBounds(10, 10, 180, 30);
+        exitButton.setBounds(10, 115, 180, 30);
+        agentButton.setBounds(10, 165, 180, 30);
+        cellButton.setBounds(10, 200, 180, 30);
+        singleButton.setBounds(10, 235, 180, 30);
+        heatButton.setBounds(10, 270, 180, 30);
         view.addToMenu(startButton);
         view.addToMenu(agentButton);
         view.addToMenu(cellButton);
         view.addToMenu(singleButton);
+        view.addToMenu(heatButton);
         view.repaint();
     }
 
@@ -252,6 +261,10 @@ public class Simulator {
 
     private void exit() {
         System.exit(0);
+    }
+    
+    private void showHeatMap() {
+        view.showStatus(step, system, stateConst, locations);
     }
 
     private void populate() {
