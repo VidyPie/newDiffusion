@@ -22,6 +22,7 @@ import javax.swing.JSplitPane;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -129,14 +130,13 @@ public class SimulatorView extends JFrame {
             int STEP_MIN = 1;
             int STEP_MAX = 10;
             int STEP_INIT = 1;
-            int currentStep = 1;
+            int currentStep = 10;
             mapDraw(currentStep);
             JSlider probPerStep = new JSlider(JSlider.HORIZONTAL, STEP_MIN, STEP_MAX, STEP_INIT);
             probPerStep.addChangeListener((ChangeEvent e) -> {
             JSlider source = (JSlider)e.getSource();
             if(!source.getValueIsAdjusting()) {
                 int newStep = (int)source.getValue();
-                System.out.println(newStep);
                 mapDraw(newStep);
             }
         });
@@ -228,8 +228,10 @@ public class SimulatorView extends JFrame {
         public void drawMapMark(int mx, int my, double chance) {
             Color color = new Color(230, 224, 224);
             g.setColor(color);
-            JLabel chanceLabel = new JLabel(Double.toString(chance));
-            chanceLabel.setFont(new Font("Serif", Font.BOLD, 11));
+            DecimalFormat df = new DecimalFormat("#.####");
+            String chance2 = df.format(chance);
+            JLabel chanceLabel = new JLabel(chance2);
+            chanceLabel.setFont(new Font("Serif", Font.BOLD, 8));
             chanceLabel.setBounds((mx * 25) + 26, (my * 25) + 26, 24, 24);
             loco.add(chanceLabel);
             g.fillRect(25 + (mx * 25), my * 25, 24, 24);

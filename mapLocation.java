@@ -145,7 +145,7 @@ public class mapLocation {
 
     public void finalizeChance(int step) {
         if (step == 1) {
-            chanceFinal1 = chancetemp1;
+            chanceFinal1 = chancetemp1; 
         } else if (step == 2) {
             chanceFinal2 = chancetemp2;
         } else if (step == 3) {
